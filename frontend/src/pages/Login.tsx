@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import SignupForm from "../features/auth/forms/signupForm";
-import LoginForm from "../features/auth/forms/signinForm";
+import SignupForm from "../features/auth/forms/SignupForm";
+import LoginForm from "../features/auth/forms/SigninForm";
 
 const Login: React.FC = () => {
   const [openSignup, setOpenSignup] = useState(false);
