@@ -1,51 +1,128 @@
-import React from "react";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const SignupForm: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+  const schema = yup.object().shape({
+    firstName: yup.string(),
+    lastName: yup.string(),
+    nickName: yup.string().required("Nickname is required"),
+    email: yup
+      .string()
+      .email("Must be a valid email")
+      .matches(/^\S+@\S+$/i, "Must be a valid email")
+      .required("Email is required"),
+    password: yup
+      .string()
+      .required("Password is required")
+      .max(80, "Max password size 80"),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref("password")], "Passwords must match")
+      .required("Confirm your password"),
+  });
+
+  type LoginFormData = yup.InferType<typeof schema>;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onBlur",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = (data: LoginFormData) => {
+    console.log("Login data:", data);
+    setLoading(true);
+  };
+  console.log(loading);
+  console.log(errors);
+
   return (
-    <div className="relative z-0 flex flex-col min-w-0 break-words bg-white border-0 shadow-xl lg:pb-4 dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
+    <div className="relative z-0 flex flex-col min-w-0 break-words bg-white border-0 shadow-xl lg:pb-4 rounded-2xl bg-clip-border">
       <div className="text-center border-black/12.5 rounded-t-2xl border-b-0 border-solid p-6">
         <h5>Create your account</h5>
       </div>
       <div className="flex-auto p-12 pt-0 pb-6 text-center">
         <div className="flex-auto p-1 text-center">
-          <form
-          // onSubmit={handleSubmit(onSubmit)}
-          >
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
               <input
                 type="text"
-                placeholder="Name"
-                className="text-sm focus:shadow-primary-outline dark:bg-slate-850 placeholder:text-gray-500 dark:placeholder:text-white/80 dark:text-white/80 leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-blue-500 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
-                aria-label="Name"
-                aria-describedby="email-addon"
-                // {...register("Name", {
-                //   required: true,
-                //   // pattern: /^\S+@\S+$/i,
-                // })}
+                placeholder="First Name"
+                className="text-sm focus:shadow-primary-outline placeholder:text-gray-500 leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-blue-500 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
+                aria-label="First Name"
+                aria-describedby="first-name-addon"
+                {...register("firstName")}
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Last Name"
+                className="text-sm focus:shadow-primary-outline placeholder:text-gray-500 leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-blue-500 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
+                aria-label="Last Name"
+                aria-describedby="last-name-addon"
+                {...register("lastName")}
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Nickname"
+                className="text-sm focus:shadow-primary-outline placeholder:text-gray-500 leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-blue-500 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
+                aria-label="Nickname"
+                aria-describedby="nickname-addon"
+                {...register("nickName")}
               />
             </div>
             <div className="mb-4">
               <input
                 type="email"
                 placeholder="Email"
-                className="text-sm focus:shadow-primary-outline dark:bg-slate-850 placeholder:text-gray-500 dark:placeholder:text-white/80 dark:text-white/80 leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-blue-500 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
+                className="text-sm focus:shadow-primary-outline placeholder:text-gray-500 leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-blue-500 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
                 aria-label="Email"
                 aria-describedby="email-addon"
-                // {...register("Email", {
-                //   required: true,
-                //   pattern: /^\S+@\S+$/i,
-                // })}
+                {...register("email")}
+              />
+              {errors.email && (
+                <p className="text-left mt-2 text-red-500 text-xs">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
+            <div className="mb-4">
+              <input
+                type="password"
+                className="text-sm focus:shadow-primary-outline placeholder:text-gray-500 leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-blue-500 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
+                placeholder="Password"
+                aria-label="Password"
+                aria-describedby="password-addon"
+                {...register("password")}
               />
             </div>
             <div className="mb-4">
               <input
                 type="password"
-                className="text-sm focus:shadow-primary-outline dark:bg-slate-850 placeholder:text-gray-500 dark:placeholder:text-white/80 dark:text-white/80 leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-blue-500 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
-                placeholder="Password"
-                aria-label="Password"
-                aria-describedby="password-addon"
-                // {...register("Password", { required: true, maxLength: 80 })}
+                className="text-sm focus:shadow-primary-outline placeholder:text-gray-500 leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-blue-500 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
+                placeholder="Confirm Password"
+                aria-label="Confirm Password"
+                aria-describedby="confirm-password-addon"
+                {...register("confirmPassword")}
               />
+              {errors.confirmPassword && (
+                <p className="text-left mt-2 text-red-500 text-xs">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
             </div>
             <div className="block min-h-6 pl-7">
               <input
@@ -72,16 +149,6 @@ const SignupForm: React.FC = () => {
                 Sign up
               </button>
             </div>
-            <p className="mt-8 mb-0 text-sm leading-normal">
-              Already have an account?
-              <br />
-              <span
-                // onClick={() => setShowLogin(!showLogin)}
-                className="font-bold text-slate-700 cursor-pointer"
-              >
-                Sign in
-              </span>
-            </p>
           </form>
         </div>
       </div>

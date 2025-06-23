@@ -10,7 +10,9 @@ const LoginLayout: React.FC<LayoutProps> = (props) => {
           {props.children}
         </div>
       </main>
-      <footer className="relative z-10 mt-auto">fenix all reserved</footer>
+      <footer className="absolute z-10 bottom-0 left-0 right-0">
+        fenix all rights reserved
+      </footer>
     </div>
   );
 };

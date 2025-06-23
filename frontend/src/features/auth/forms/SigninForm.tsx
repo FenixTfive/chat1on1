@@ -1,7 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const SigninForm: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+  const schema = yup.object().shape({
+    email: yup
+      .string()
+      .email("Must be a valid email")
+      .matches(/^\S+@\S+$/i, "Must be a valid email")
+      .required("Email is required"),
+    password: yup
+      .string()
+      .required("Password is required")
+      .max(80, "Max password size 80"),
+  });
+
+  type LoginFormData = yup.InferType<typeof schema>;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onBlur",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = (data: LoginFormData) => {
+    console.log("Login data:", data);
+    setLoading(true);
+  };
+
   return (
     <div className="relative z-0 flex flex-col min-w-0 break-words bg-white border-0 shadow-xl rounded-2xl bg-clip-border">
       <div className="text-center border-black/12.5 rounded-t-2xl border-b-0 border-solid p-6">
@@ -10,11 +46,11 @@ const SigninForm: React.FC = () => {
       <div className="flex-auto p-12 pt-0 pb-6 text-center">
         <div className="flex-auto p-1 text-center">
           <form
-          // onSubmit={handleSubmit(onSubmit)}
-          // onFocus={() => {
-          //   setApiError(null);
-          //   setApiSuccess(false);
-          // }}
+            onSubmit={handleSubmit(onSubmit)}
+            // onFocus={() => {
+            //   setApiError(null);
+            //   setApiSuccess(false);
+            // }}
           >
             <div className="mb-4">
               <input
@@ -22,19 +58,13 @@ const SigninForm: React.FC = () => {
                 placeholder="Email"
                 className={`text-sm focus:shadow-primary-outline placeholder:text-gray-500 leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-blue-500 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow aria-label="Email"`}
                 aria-describedby="email-addon"
-                // {...register("Email", {
-                //   required: "Email is required",
-                //   pattern: {
-                //     value: /^\S+@\S+$/i,
-                //     message: "Must be a valid email",
-                //   },
-                // })}
+                {...register("email")}
               />
-              {/* {errors.Email && (
-              <p className="text-left mt-2 text-red-500 text-xs">
-                {errors.Email.message}
-              </p>
-            )} */}
+              {errors.email && (
+                <p className="text-left mt-2 text-red-500 text-xs">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
             <div className="mb-4">
               <input
@@ -43,19 +73,13 @@ const SigninForm: React.FC = () => {
                 placeholder="Password"
                 aria-label="Password"
                 aria-describedby="password-addon"
-                // {...register("Password", {
-                //   required: "Password required",
-                //   maxLength: {
-                //     value: 80,
-                //     message: "Max password size 80",
-                //   },
-                // })}
+                {...register("password", {})}
               />
-              {/* {errors.Password && (
-              <p className={` text-left mt-2 text-red-500 text-xs`}>
-                {errors.Password.message}
-              </p>
-            )} */}
+              {errors.password && (
+                <p className={` text-left mt-2 text-red-500 text-xs`}>
+                  {errors.password.message}
+                </p>
+              )}
             </div>
             {/* <p
             className={` ${
@@ -74,25 +98,28 @@ const SigninForm: React.FC = () => {
                 id="submitLogin"
                 type="submit"
                 className="inline-block w-full px-5 py-2.5 mt-6 mb-2 text-sm font-bold text-center text-white align-middle transition-all ease-in border-0 rounded-lg shadow-md cursor-pointer active:-translate-y-px active:hover:text-white active:text-black hover:-translate-y-px hover:shadow-xs leading-normal tracking-tight-rem bg-150 bg-x-25 bg-blue-500 hover:border-blue-500 hover:bg-blue-500 hover:text-white disabled:opacity-65 disabled:hover:bg-none disabled:active:bg-none"
-                // disabled={formSubmitted}
+                // disabled={loading}
               >
-                {/* {formSubmitted && (
-                <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
-                  <circle
-                    className="opacity-0"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75 "
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-              )} */}
+                {loading && (
+                  <svg
+                    className="animate-spin h-5 w-5 mr-3"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-0"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75 "
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                )}
                 Sign in
               </button>
             </div>
