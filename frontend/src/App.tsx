@@ -1,11 +1,14 @@
 import "./App.css";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./navigation/routes";
+import AuthenticationContextProvider from "./ApiContext/AuthenticationContext";
 
 function App() {
   return (
     <>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <AuthenticationContextProvider>
+        <RouterProvider router={router} />
+      </AuthenticationContextProvider>
     </>
   );
 }
