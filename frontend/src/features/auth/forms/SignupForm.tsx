@@ -1,10 +1,16 @@
 import React, { useState } from "react";
+import { SignupFormProps } from "../interfaces";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useApiConnectorContext } from "../../../ApiContext/ApiConnectorContext";
+import { AuthSDK } from "../../../ApiConnectorSDK";
+import { toast } from "react-toastify";
 
-const SignupForm: React.FC = () => {
+const SignupForm: React.FC<SignupFormProps> = ({ setOpenSignup }) => {
   const [loading, setLoading] = useState(false);
+  const apiConnector = useApiConnectorContext();
+
   const schema = yup.object().shape({
     firstName: yup.string(),
     lastName: yup.string(),
@@ -24,7 +30,7 @@ const SignupForm: React.FC = () => {
       .required("Confirm your password"),
   });
 
-  type LoginFormData = yup.InferType<typeof schema>;
+  type SignupFormData = yup.InferType<typeof schema>;
 
   const {
     register,
@@ -36,12 +42,34 @@ const SignupForm: React.FC = () => {
     defaultValues: {
       email: "",
       password: "",
+      firstName: "",
+      lastName: "",
+      nickName: "",
+      confirmPassword: "",
     },
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log("Login data:", data);
-    setLoading(true);
+  const onSubmit = async (data: SignupFormData) => {
+    try {
+      setLoading(true);
+      const response = await AuthSDK.AuthSignUp(apiConnector, {
+        email: data.email,
+        firstName: data.firstName ?? "",
+        lastName: data.lastName ?? "",
+        nickName: data.nickName,
+        password: data.password,
+      });
+
+      if (response) {
+        toast.success("Account created successfully!");
+        setOpenSignup(false);
+      }
+    } catch (error) {
+      console.error("Error during form submission:", error);
+      toast.error("Failed to create account.");
+    } finally {
+      setLoading(false);
+    }
   };
   console.log(loading);
   console.log(errors);
@@ -83,6 +111,11 @@ const SignupForm: React.FC = () => {
                 aria-describedby="nickname-addon"
                 {...register("nickName")}
               />
+              {errors.nickName && (
+                <p className="text-left mt-2 text-red-500 text-xs">
+                  {errors.nickName.message}
+                </p>
+              )}
             </div>
             <div className="mb-4">
               <input

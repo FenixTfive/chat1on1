@@ -1,11 +1,19 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useApiConnectorContext } from "../../../ApiContext/ApiConnectorContext";
+import { useAuth } from "../../../ApiContext/AuthenticationContext";
+import { AuthSDK } from "../../../ApiConnectorSDK";
+import { toast } from "react-toastify";
 
 const SigninForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const apiConnector = useApiConnectorContext();
+  const navigate = useNavigate();
+
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -33,9 +41,25 @@ const SigninForm: React.FC = () => {
     },
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log("Login data:", data);
-    setLoading(true);
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      setLoading(true);
+      const response = await AuthSDK.AuthSignIn(apiConnector, {
+        email: data.email,
+        password: data.password,
+      });
+      if (response) {
+        const accessToken = apiConnector.getToken();
+        login({ accessToken, user: null });
+      }
+
+      navigate("/dashboard", { replace: true });
+    } catch (error) {
+      console.log("Error during form submission:", error);
+      toast.error("Failed to sign in.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

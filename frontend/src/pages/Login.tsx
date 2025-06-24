@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import SignupForm from "../features/auth/forms/SignupForm";
-import LoginForm from "../features/auth/forms/SigninForm";
+import SigninForm from "../features/auth/forms/SigninForm";
 
 const Login: React.FC = () => {
   const [openSignup, setOpenSignup] = useState(false);
@@ -10,7 +10,11 @@ const Login: React.FC = () => {
       <div className="container pb-8">
         <div className="flex flex-wrap justify-center align-items-center">
           <div className="w-full max-w-md px-6 mx-auto shrink-0 md:flex-1 ">
-            {openSignup ? <SignupForm /> : <LoginForm />}
+            {openSignup ? (
+              <SignupForm setOpenSignup={setOpenSignup} />
+            ) : (
+              <SigninForm />
+            )}
 
             <div className="text-xs font-bold text-center mt-4">
               {openSignup

@@ -16,7 +16,7 @@ const initialState: AuthState = {
 };
 
 interface AuthContextType extends AuthState {
-  login: (data: { accessToken: string; user: User }) => void;
+  login: (data: { accessToken: string | null; user: User | null }) => void;
   logout: () => void;
   isAuthenticated: () => boolean;
 }
@@ -53,7 +53,10 @@ const AuthenticationContextProvider: React.FC<
     storeAuthInLocalStorage(auth);
   }, [auth]);
 
-  const login = (data: { accessToken: string; user: User }): void => {
+  const login = (data: {
+    accessToken: string | null;
+    user: User | null;
+  }): void => {
     setAuth((prev) => ({
       ...prev,
       accessToken: data.accessToken,

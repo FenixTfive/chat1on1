@@ -4,7 +4,6 @@ import { useAuth } from "../ApiContext/AuthenticationContext";
 
 const PrivateRoutes: React.FC = () => {
   const { isAuthenticated } = useAuth();
-  console.log("PrivateRoutes: isAuthenticated:", isAuthenticated());
 
   return isAuthenticated() ? <Outlet /> : <Navigate to="/login" />;
 };

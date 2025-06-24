@@ -9,7 +9,7 @@ export class ApiConnector implements IApiConnector {
     private _config: IApiConfig;
     public logger: ILogger;
     private _token: string | null = null;
-    private _cache: Record<string, any> = {};
+    private _cache: Record<string, unknown> = {};
 
     constructor(config: IApiConfig, logger?: ILogger) {
         this._config = config;
