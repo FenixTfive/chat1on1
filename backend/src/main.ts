@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe, LogLevel, Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { VERSION } from './version';
+import { AuthenticatedSocketIoAdapter } from './middlewares/AuthenticatedSocketIoAdapter';
 
 async function bootstrap() {
   // Define log levels as LogLevel[]
@@ -34,6 +35,9 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3000;
   Logger.log(`Web Server Listening on port ${port}`);
+
+  app.useWebSocketAdapter(new AuthenticatedSocketIoAdapter(app));
+
   await app.listen(port);
 }
 bootstrap();
