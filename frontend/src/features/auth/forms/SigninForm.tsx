@@ -50,6 +50,8 @@ const SigninForm: React.FC = () => {
       });
       if (response) {
         const accessToken = apiConnector.getToken();
+        //todo: call authme to get user info
+        // const user = await AuthSDK.AuthMe(apiConnector);
         login({ accessToken, user: null });
       }
 

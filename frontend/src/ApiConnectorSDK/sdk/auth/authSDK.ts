@@ -4,8 +4,6 @@ import { HttpMethod } from '../../apiConnector/httpClient/enums/HttpMethod';
 import { SignInType, SignUpType } from './types';
 
 export async function AuthSignIn(api: IApiConnector, { email, password }: SignInType): Promise<null | Error> {
-    console.log('AuthSignIn called with:', { email, password });
-
     const client = api.createClient();
     const config = client.createRequestConfig({
         method: HttpMethod.POST,
