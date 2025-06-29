@@ -2,57 +2,34 @@
 
 v20.19.3
 
-# React + TypeScript + Vite
+# 📡 Live Chat Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is the **frontend** for a full-screen **live chat** application with basic authentication. Users can sign up or log in, and then access a **global chat room** where all messages are broadcasted in real time to all connected users. Messages are not stored — this is a lightweight live chat **template** intended for real-time interaction only.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Login** form
+- **Signup** form
+- Fullscreen **general chat room**
+- Real-time **broadcast** of all messages to connected users
+- Messages are **not persisted**
+- Clean, minimal UI — ideal as a template for further development
 
-## Expanding the ESLint configuration
+## 🧪 Test Users
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+After running the backend migrations (`npx prisma migrate dev`), you can use the following users to log in:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
+| Email               | Password      |
+|---------------------|---------------|
+| fenix1@example.com  | P4sswO0rd1    |
+| fenix2@example.com  | P4sswO0rd2    |
+| fenix3@example.com  | P4sswO0rd3    |
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## ⚙️ Getting Started
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+1. Clone this repository:
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    "react-x": reactX,
-    "react-dom": reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs["recommended-typescript"].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
-```
+   ```bash
+   git clone https://github.com/your-username/your-repo-name.git
+   cd your-repo-name
+
