@@ -33,3 +33,6 @@ After running the backend migrations (`npx prisma migrate dev`), you can use the
    git clone https://github.com/your-username/your-repo-name.git
    cd your-repo-name
 
+2. create env file with
+   VITE_API_URL="your local url"
+
