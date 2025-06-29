@@ -62,4 +62,26 @@ export async function AuthSignUp(api: IApiConnector, { email, password, firstNam
         });
 }
 
+export async function AuthMe(api: IApiConnector) {
+    const client = api.createClient();
+    const config = client.createRequestConfig({
+        method: HttpMethod.GET,
+        url: '/auth/me/',
+        headers: createHeadersFromObject({ 'Authorization': `Bearer ${api.getToken()}` })
+    })
+
+    return client
+        .fetch(config)
+        .then(async (res) => {
+            if (!res.ok) return Promise.reject(await res.json());
+            return res;
+        })
+        .then(async (res) => {
+            const resjson = await res.json();
+            return Promise.resolve(resjson);
+        })
+        .catch((error) => {
+            return Promise.reject(error);
+        });
+}
 

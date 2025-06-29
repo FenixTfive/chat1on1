@@ -44,16 +44,17 @@ const SigninForm: React.FC = () => {
   const onSubmit = async (data: LoginFormData) => {
     try {
       setLoading(true);
-      const response = await AuthSDK.AuthSignIn(apiConnector, {
+      await AuthSDK.AuthSignIn(apiConnector, {
         email: data.email,
         password: data.password,
       });
-      if (response) {
-        const accessToken = apiConnector.getToken();
-        //todo: call authme to get user info
-        // const user = await AuthSDK.AuthMe(apiConnector);
-        login({ accessToken, user: null });
-      }
+
+      const accessToken = apiConnector.getToken();
+      //todo: call authme to get user info
+      const userInfo = await AuthSDK.AuthMe(apiConnector);
+      console.log("userInfo", userInfo);
+
+      login({ accessToken, user: userInfo });
 
       navigate("/dashboard", { replace: true });
     } catch (error) {

@@ -3,6 +3,9 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 interface User {
   id: number;
   email: string;
+  firstName?: string;
+  lastName?: string;
+  nickName: string;
 }
 interface AuthState {
   user: User | null;

@@ -34,6 +34,9 @@ export const SocketContextProvider: React.FC<SocketContextProviderProps> = ({
   const [messages, setMessages] = React.useState<LiveMessage[]>([]);
 
   useEffect(() => {
+    if (!accessToken) {
+      return;
+    }
     // create a new socket connection
     const socket = io("http://localhost:3000", {
       auth: {

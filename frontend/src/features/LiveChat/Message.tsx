@@ -12,6 +12,9 @@ const Message: React.FC<MessageProps> = React.memo(({ message }) => {
           : `bg-violet-200 text-left`
       } p-2 rounded`}
     >
+      <span className="text-sm font-bold text-gray-600">
+        {(message.user.id !== user?.id && user?.nickName) || "You"}
+      </span>
       <p className="text-gray-900 m-0 leading-none text-wrap">{message.text}</p>
       <span className="text-xs text-gray-600">
         {new Date(Date.now()).toLocaleTimeString([], {
