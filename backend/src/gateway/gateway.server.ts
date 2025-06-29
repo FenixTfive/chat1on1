@@ -38,8 +38,30 @@ export class GatewayServer implements OnGatewayConnection, OnGatewayDisconnect {
         this.logger.log(`Websocket Client ID: ${client.id}`);
         this.logger.log(`User client data: ${JSON.stringify(client.data.user)}`);
         this.logger.log("Message payload:", payload);
-        // this.server.emit('message', payload); // Broadcast the message to all connected clients including the sender
-        client.broadcast.emit('messageFromServer', payload); // Broadcast the message to all connected clients except the sender
+
+        // Broadcast the message to all connected clients including the sender
+        this.server.emit('messageFromServer', {
+            message: {
+                id: Date.now(), // You can generate a unique ID for the message
+                text: payload.text
+            },
+            user: {
+                id: client.data.user.id,
+                nickName: client.data.user.nickName,
+                firstName: client.data.user.firstName,
+                lastName: client.data.user.lastName,
+            },
+        });
+        // Broadcast the message to all connected clients except the sender
+        // client.broadcast.emit('messageFromServer', {
+        //     message: payload.text,
+        //     user: {
+        //         id: client.data.user.id,
+        //         nickName: client.data.user.nickName,
+        //         firstName: client.data.user.firstName,
+        //         lastName: client.data.user.lastName,
+        //     },
+        // });
     }
 
     // WebSocket gateway implementation
